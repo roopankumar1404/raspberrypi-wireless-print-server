@@ -1,1 +1,41 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background-color: #f9f9f9;
+  color: #222;
+  line-height: 1.7;
+}
+
+h1, h2 {
+  color: #2a62b2;
+}
+
+ul, ol {
+  margin-left: 20px;
+}
+
+pre {
+  background-color: #f0f0f0;
+  padding: 10px;
+  overflow-x: auto;
+  border-left: 4px solid #007bff;
+  border-radius: 5px;
+}
+
+code {
+  font-family: 'Courier New', monospace;
+  color: #d63384;
+}
+
+img {
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9em;
+  color: #777;
+}
 
