@@ -21,30 +21,61 @@
     <li><code>sudo apt update && sudo apt upgrade -y</code></li>
     <li><code>sudo apt install cups -y</code></li>
     <li><code>sudo usermod -aG lpadmin rk</code></li>
-    <li>Edit the CUPS config:
+    <li>Edit the CUPS config file:
       <pre>sudo nano /etc/cups/cupsd.conf</pre>
     </li>
-    <li>Make these changes in the file:<br>
-      Allow @local for these 4 sections: <code>&lt;Location /&gt;</code>, <code>/admin</code>, <code>/admin/conf</code>, and <code>/admin/log</code>
+    <li>Make the following changes:
+      <ul>
+        <li>Add <code>Allow @local</code> under these sections:</li>
+        <ul>
+          <li><code>&lt;Location /&gt;</code></li>
+          <li><code>&lt;Location /admin&gt;</code></li>
+          <li><code>&lt;Location /admin/conf&gt;</code></li>
+          <li><code>&lt;Location /admin/log&gt;</code></li>
+        </ul>
+      </ul>
     </li>
-    <li>Restart CUPS:
+    <li>Restart the CUPS service:
       <pre>sudo systemctl restart cups</pre>
     </li>
     <li><code>sudo apt install hplip hplip-gui -y</code></li>
-    <li><code>sudo hp-setup -i</code> and follow the prompts</li>
-    <li>Open <code>http://&lt;Pi-IP&gt;:631</code> in browser → Add printer</li>
-    <li>Set the working printer as default</li>
+    <li><code>sudo hp-setup -i</code> → Select <strong>USB</strong> and follow the prompts</li>
+    <li>Open <code>http://&lt;Pi-IP&gt;:631</code> in a browser</li>
+    <li>Add printer and select correct driver (HP LaserJet Professional P1106)</li>
+    <li>Set that printer as the <strong>default</strong></li>
+    <li>Delete duplicate or non-working printers (if any)</li>
   </ol>
 
-  <h2>📱 Mobile Printing</h2>
-  <p>Use <strong>Mopria Print Service</strong> (Android) and add printer manually:<br>
-    <code>ipp://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></p>
+  <h2>🖥️ Wireless Printing from Windows</h2>
+  <ul>
+    <li>Go to Control Panel → Devices and Printers → Add Printer</li>
+    <li>Click “The printer that I want isn't listed”</li>
+    <li>Choose “Select a shared printer by name”</li>
+    <li>Enter: <code>http://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></li>
+    <li>Select appropriate driver or use Windows Update to find HP P1106</li>
+  </ul>
 
-  <h2>🖼️ Screenshots</h2>
-  <img src="images/laptop-print.png" alt="Laptop Print" width="300">
-  <img src="images/mobile-print.png" alt="Mobile Print" width="300">
+  <h2>📱 Wireless Printing from Android</h2>
+  <ul>
+    <li>Install <strong>Mopria Print Service</strong> from Play Store</li>
+    <li>Go to Settings → Printing → Enable Mopria</li>
+    <li>Tap “Add printer” manually</li>
+    <li>Enter IPP URI: <code>ipp://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></li>
+    <li>Save and print</li>
+  </ul>
+
+  <h2>🖼️ Setup Screenshots</h2>
+
+  <h3>💻 Laptop Setup</h3>
+  <img src="images/laptop-setup.png" alt="Laptop printing demo" width="500">
+
+  <h3>📱 Mobile Setup</h3>
+  <img src="images/mobile-setup.png" alt="Mobile printing demo" width="300">
 
   <h2>💡 After Reboot</h2>
-  <p>No extra steps needed — everything auto-starts at boot.</p>
+  <p>No extra steps needed — all configurations persist. Your Pi will auto-start everything and the printer will remain shared wirelessly on the network.</p>
+
+  <hr>
+  <p style="font-size: small;">Created by Roopan Kumar N | Project Repository: <a href="https://github.com/roopankumar1404/raspberrypi-wireless-print-server" target="_blank">GitHub</a></p>
 </body>
 </html>
