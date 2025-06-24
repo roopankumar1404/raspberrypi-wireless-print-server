@@ -1,0 +1,20 @@
+body {
+  font-family: sans-serif;
+  margin: 30px;
+  background-color: #f5f5f5;
+  color: #333;
+}
+h1, h2 {
+  color: #2b5fad;
+}
+pre {
+  background: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+img {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
