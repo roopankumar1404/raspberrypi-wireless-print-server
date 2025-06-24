@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Raspberry Pi Wireless Print Server</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>🖨️ Raspberry Pi Wireless Print Server Setup</h1>
+  <p>This guide helps you turn a Raspberry Pi and USB printer (like HP LaserJet P1106) into a wireless print server for Windows and Android.</p>
+
+  <h2>📦 Requirements</h2>
+  <ul>
+    <li>Raspberry Pi 4 with Raspberry Pi OS</li>
+    <li>USB Printer (e.g., HP LaserJet P1106)</li>
+    <li>Wi-Fi network</li>
+  </ul>
+
+  <h2>⚙️ Step-by-Step Setup</h2>
+  <ol>
+    <li><code>sudo apt update && sudo apt upgrade -y</code></li>
+    <li><code>sudo apt install cups -y</code></li>
+    <li><code>sudo usermod -aG lpadmin rk</code></li>
+    <li>Edit the CUPS config:
+      <pre>sudo nano /etc/cups/cupsd.conf</pre>
+    </li>
+    <li>Make these changes in the file:<br>
+      Allow @local for these 4 sections: <code>&lt;Location /&gt;</code>, <code>/admin</code>, <code>/admin/conf</code>, and <code>/admin/log</code>
+    </li>
+    <li>Restart CUPS:
+      <pre>sudo systemctl restart cups</pre>
+    </li>
+    <li><code>sudo apt install hplip hplip-gui -y</code></li>
+    <li><code>sudo hp-setup -i</code> and follow the prompts</li>
+    <li>Open <code>http://&lt;Pi-IP&gt;:631</code> in browser → Add printer</li>
+    <li>Set the working printer as default</li>
+  </ol>
+
+  <h2>📱 Mobile Printing</h2>
+  <p>Use <strong>Mopria Print Service</strong> (Android) and add printer manually:<br>
+    <code>ipp://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></p>
+
+  <h2>🖼️ Screenshots</h2>
+  <img src="images/laptop-print.png" alt="Laptop Print" width="300">
+  <img src="images/mobile-print.png" alt="Mobile Print" width="300">
+
+  <h2>💡 After Reboot</h2>
+  <p>No extra steps needed — everything auto-starts at boot.</p>
+</body>
+</html>
