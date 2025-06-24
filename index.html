@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Raspberry Pi Wireless Print Server – Setup Guide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>🖨️ Raspberry Pi Wireless Print Server – Setup Guide</h1>
+  <p>This guide walks you through setting up a wireless print server using your Raspberry Pi, enabling wireless printing from Windows and Android devices over your local network.</p>
+
+  <h2>🔧 Prerequisites</h2>
+  <ul>
+    <li>Raspberry Pi with Raspberry Pi OS installed</li>
+    <li>Internet connectivity</li>
+    <li>Compatible printer (USB or network)</li>
+    <li>SSH or terminal access to the Pi</li>
+  </ul>
+
+  <h2>🚀 Step-by-Step Procedure</h2>
+  <ol>
+    <li><strong>Update Package List</strong><pre><code>sudo apt update</code></pre></li>
+    <li><strong>Upgrade Installed Packages</strong><pre><code>sudo apt upgrade -y</code></pre></li>
+    <li><strong>Install CUPS (Common Unix Printing System)</strong><pre><code>sudo apt install cups -y</code></pre></li>
+    <li><strong>Add Your User to the <code>lpadmin</code> Group</strong><pre><code>sudo usermod -aG lpadmin rk</code></pre></li>
+    <li><strong>Edit CUPS Configuration</strong><pre><code>sudo nano /etc/cups/cupsd.conf</code></pre></li>
+    <li><strong>Modify the Configuration File</strong><br><br>
+      <p><b>🔁 1. Root Location</b></p>
+      <pre><code>&lt;Location /&gt;
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;</code></pre>
+      <p><b>🔁 2. Admin Page</b></p>
+      <pre><code>&lt;Location /admin&gt;
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;</code></pre>
+      <p><b>🔁 3. Admin Configuration</b></p>
+      <pre><code>&lt;Location /admin/conf&gt;
+  AuthType Default
+  Require user @SYSTEM
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;</code></pre>
+      <p><b>🔁 4. Admin Log</b></p>
+      <pre><code>&lt;Location /admin/log&gt;
+  AuthType Default
+  Require user @SYSTEM
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;</code></pre>
+    </li>
+    <li><strong>Save the File and Restart CUPS</strong><pre><code>sudo systemctl restart cups</code></pre></li>
+    <li><strong>Install HP Printer Drivers</strong><pre><code>sudo apt install hplip hplip-gui -y</code></pre></li>
+    <li><strong>Run HP Setup Wizard</strong><pre><code>sudo hp-setup -i</code></pre></li>
+    <li><strong>Access CUPS Web Interface</strong><pre><code>http://&lt;raspberrypi-ip&gt;:631</code></pre></li>
+    <li><strong>Add Your Printer</strong>
+      <ul>
+        <li>Go to “Printers” section</li>
+        <li>Click “Add Printer”</li>
+        <li>Select your connected printer</li>
+        <li>Choose the appropriate make/model</li>
+        <li>Set as default and delete other entries if needed</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>💻 Windows 11 Printing Setup</h2>
+  <ol>
+    <li>Open Control Panel → Devices and Printers → Add a printer</li>
+    <li>Click “The printer I want isn’t listed”</li>
+    <li>Select “Select a shared printer by name”</li>
+    <li>Enter:<br>
+      <pre><code>http://&lt;raspberrypi-ip&gt;:631/printers/HP-LaserJet-Professional-P1106</code></pre>
+    </li>
+    <li>Click Next and install the suggested driver</li>
+  </ol>
+
+  <h2>📱 Android Printing Setup (No HP App Needed)</h2>
+  <ol>
+    <li>Install <strong>Mopria Print Service</strong> from Play Store</li>
+    <li>Open a document → Share → Print</li>
+    <li>Click "All printers" → “Add printer”</li>
+    <li>Enter:<br>
+      <pre><code>ipp://&lt;raspberrypi-ip&gt;:631/printers/HP-LaserJet-Professional-P1106</code></pre>
+    </li>
+    <li>Print directly from your phone</li>
+  </ol>
+
+  <h2>🖼️ Screenshots</h2>
+  <img src="images/laptop-setup.png" alt="Laptop Setup" width="300">
+  <img src="images/mobile-setup.png" alt="Mobile Setup" width="300">
+
+  <footer>
+    <p>Created by Roopan Kumar N</p>
+  </footer>
+</body>
+</html>
 
