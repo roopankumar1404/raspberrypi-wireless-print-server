@@ -29,7 +29,7 @@ Once set up, the Raspberry Pi acts as a wireless print server that can accept pr
 - `README.md` – Overview and project introduction
 
 📎 Access the full guide here:  
-🔗 [Setup Guide on GitHub Pages](https://roopankumar1404.github.io/raspberrypi-wireless-print-server/)
+🔗 [Setup Guide on GitHub Pages]()
 
 👤 Author
 Roopan Kumar N
