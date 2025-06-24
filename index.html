@@ -6,76 +6,105 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>🖨️ Raspberry Pi Wireless Print Server Setup</h1>
-  <p>This guide helps you turn a Raspberry Pi and USB printer (like HP LaserJet P1106) into a wireless print server for Windows and Android.</p>
+  <h1>🖨️ Raspberry Pi Wireless Print Server – Setup Guide</h1>
+  <p>This guide walks you through setting up a wireless print server using your Raspberry Pi, enabling you to print from devices on your network.</p>
 
-  <h2>📦 Requirements</h2>
+  <h2>🔧 Prerequisites</h2>
   <ul>
-    <li>Raspberry Pi 4 with Raspberry Pi OS</li>
-    <li>USB Printer (e.g., HP LaserJet P1106)</li>
-    <li>Wi-Fi network</li>
+    <li>Raspberry Pi with Raspberry Pi OS</li>
+    <li>Internet connectivity</li>
+    <li>USB printer (e.g., HP LaserJet P1106)</li>
+    <li>SSH or terminal access to the Pi</li>
   </ul>
 
-  <h2>⚙️ Step-by-Step Setup</h2>
+  <h2>🚀 Raspberry Pi Setup Procedure</h2>
   <ol>
-    <li><code>sudo apt update && sudo apt upgrade -y</code></li>
-    <li><code>sudo apt install cups -y</code></li>
-    <li><code>sudo usermod -aG lpadmin rk</code></li>
-    <li>Edit the CUPS config file:
-      <pre>sudo nano /etc/cups/cupsd.conf</pre>
+    <li><strong>Update package list</strong>
+      <pre><code>sudo apt update</code></pre>
     </li>
-    <li>Make the following changes:
-      <ul>
-        <li>Add <code>Allow @local</code> under these sections:</li>
-        <ul>
-          <li><code>&lt;Location /&gt;</code></li>
-          <li><code>&lt;Location /admin&gt;</code></li>
-          <li><code>&lt;Location /admin/conf&gt;</code></li>
-          <li><code>&lt;Location /admin/log&gt;</code></li>
-        </ul>
-      </ul>
+    <li><strong>Upgrade installed packages</strong>
+      <pre><code>sudo apt upgrade -y</code></pre>
     </li>
-    <li>Restart the CUPS service:
-      <pre>sudo systemctl restart cups</pre>
+    <li><strong>Install CUPS (Common Unix Printing System)</strong>
+      <pre><code>sudo apt install cups -y</code></pre>
     </li>
-    <li><code>sudo apt install hplip hplip-gui -y</code></li>
-    <li><code>sudo hp-setup -i</code> → Select <strong>USB</strong> and follow the prompts</li>
-    <li>Open <code>http://&lt;Pi-IP&gt;:631</code> in a browser</li>
-    <li>Add printer and select correct driver (HP LaserJet Professional P1106)</li>
-    <li>Set that printer as the <strong>default</strong></li>
-    <li>Delete duplicate or non-working printers (if any)</li>
+    <li><strong>Add your user to the <code>lpadmin</code> group</strong>
+      <pre><code>sudo usermod -aG lpadmin rk</code></pre>
+    </li>
+    <li><strong>Edit CUPS configuration</strong>
+      <pre><code>sudo nano /etc/cups/cupsd.conf</code></pre>
+    </li>
+    <li><strong>Make the following changes in <code>cupsd.conf</code></strong>
+      <pre><code>&lt;Location /&gt;
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;
+
+&lt;Location /admin&gt;
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;
+
+&lt;Location /admin/conf&gt;
+  AuthType Default
+  Require user @SYSTEM
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;
+
+&lt;Location /admin/log&gt;
+  AuthType Default
+  Require user @SYSTEM
+  Order allow,deny
+  Allow @local
+&lt;/Location&gt;
+</code></pre>
+    </li>
+    <li><strong>Restart CUPS service</strong>
+      <pre><code>sudo systemctl restart cups</code></pre>
+    </li>
+    <li><strong>Install HP printer drivers</strong>
+      <pre><code>sudo apt install hplip hplip-gui -y</code></pre>
+    </li>
+    <li><strong>Run HP setup wizard</strong>
+      <pre><code>sudo hp-setup -i</code></pre>
+    </li>
+    <li><strong>Access CUPS Web Interface</strong>
+      <pre><code>http://&lt;raspberrypi-ip&gt;:631</code></pre>
+    </li>
+    <li><strong>Add your printer in the CUPS interface</strong></li>
   </ol>
 
-  <h2>🖥️ Wireless Printing from Windows</h2>
-  <ul>
-    <li>Go to Control Panel → Devices and Printers → Add Printer</li>
-    <li>Click “The printer that I want isn't listed”</li>
-    <li>Choose “Select a shared printer by name”</li>
-    <li>Enter: <code>http://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></li>
-    <li>Select appropriate driver or use Windows Update to find HP P1106</li>
-  </ul>
+  <h2>💻 Printing from Windows</h2>
+  <ol>
+    <li>Open Control Panel → Devices and Printers → Add Printer</li>
+    <li>Click "The printer I want isn't listed"</li>
+    <li>Choose "Select a shared printer by name"</li>
+    <li>Enter:
+      <pre><code>http://&lt;raspberrypi-ip&gt;:631/printers/HP-LaserJet-Professional-P1106</code></pre>
+    </li>
+    <li>Click Next and install driver</li>
+  </ol>
 
-  <h2>📱 Wireless Printing from Android</h2>
-  <ul>
+  <h2>📱 Printing from Android</h2>
+  <ol>
     <li>Install <strong>Mopria Print Service</strong> from Play Store</li>
-    <li>Go to Settings → Printing → Enable Mopria</li>
-    <li>Tap “Add printer” manually</li>
-    <li>Enter IPP URI: <code>ipp://&lt;Pi-IP&gt;:631/printers/HP-LaserJet-Professional-P1106</code></li>
-    <li>Save and print</li>
-  </ul>
+    <li>Go to Print → Add printer manually</li>
+    <li>Enter:
+      <pre><code>ipp://&lt;raspberrypi-ip&gt;:631/printers/HP-LaserJet-Professional-P1106</code></pre>
+    </li>
+    <li>Print any file from phone using “Share → Print”</li>
+  </ol>
 
-  <h2>🖼️ Setup Screenshots</h2>
+  <h2>♻️ After Reboot</h2>
+  <p>No extra configuration is needed. Your Raspberry Pi will auto-connect to the printer and CUPS will start automatically.</p>
 
-  <h3>💻 Laptop Setup</h3>
-  <img src="images/laptop-setup.png" alt="Laptop printing demo" width="500">
-
-  <h3>📱 Mobile Setup</h3>
-  <img src="images/mobile-setup.png" alt="Mobile printing demo" width="300">
-
-  <h2>💡 After Reboot</h2>
-  <p>No extra steps needed — all configurations persist. Your Pi will auto-start everything and the printer will remain shared wirelessly on the network.</p>
-
-  <hr>
-  <p style="font-size: small;">Created by Roopan Kumar N | Project Repository: <a href="https://github.com/roopankumar1404/raspberrypi-wireless-print-server" target="_blank">GitHub</a></p>
+  <h2>🖼️ Screenshots</h2>
+  <img src="images/laptop-print.png" alt="Laptop Printing Screenshot" width="300">
+  <img src="images/mobile-print.png" alt="Mobile Printing Screenshot" width="300">
+  
+  <footer>
+    <p>Created by Roopan Kumar N </p>
+  </footer>
 </body>
 </html>
